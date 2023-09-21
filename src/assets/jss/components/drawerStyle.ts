@@ -1,6 +1,5 @@
 import { createUseStyles } from 'react-jss'
 import { Theme } from '../theme'
-import grassBackground from '../../images/free_repeating_background_texture-light_green.jpg'
 
 const drawerWidth = 260
 
@@ -44,7 +43,7 @@ export default createUseStyles((theme: Theme) => ({
     outline: 0,
     // backgroundColor: theme.palette.common.white,
 
-    backgroundImage: `url(${grassBackground})`,
+    backgroundColor: 'white',
     backgroundRepeat: 'repeat',
     transition: `transform 300ms ${theme.transition.easing.easeInOut}`
   },

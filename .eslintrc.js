@@ -15,7 +15,8 @@ module.exports = {
   },
   rules: {
     'no-unused-vars': ['error', { argsIgnorePattern: 'children', args: 'none' }],
-    'react/jsx-props-no-spreading': 'warn'
+    'react/jsx-props-no-spreading': 'warn',
+    'prettier/prettier': ['error', { endOfLine: 'auto' }]
   },
   env: {
     browser: true,

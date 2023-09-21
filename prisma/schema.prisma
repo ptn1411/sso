@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root@127.0.0.1:3306/appsso"
+}
+
+enum Role {
+  USER
+  PREMIUM
+  ADMIN
+}
+
+model User {
+  id          String        @id @default(uuid())
+  username    String        @unique
+  email       String        @unique
+  password    String
+  name        String
+  role        Role          @default(USER)
+  SSOProvider SSOProvider[]
+  UserLink    UserLink[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model SSOProvider {
+  id          String     @id @default(uuid())
+  userId      String
+  user        User       @relation(fields: [userId], references: [id])
+  name        String
+  token       String
+  homepageURL String
+  callbackURL String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  UserLink    UserLink[]
+}
+
+model UserLink {
+  id            Int         @id @default(autoincrement())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  SSOProviderId String
+  SSOProvider   SSOProvider @relation(fields: [SSOProviderId], references: [id])
+  token         String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}

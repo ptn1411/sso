@@ -7,7 +7,7 @@ import Grid from '../../components/Grid'
 import moviesStyle from '../../assets/jss/views/moviesStyle'
 
 import { ReduxState } from '../../store/rootReducer'
-import { triggerMovies, clearMovies } from '../../store/actions/index'
+import { triggerMovies, clearMovies } from '../../store/actions'
 import Loading from '../Exception/Loading'
 import { StaticContext } from '../../server/StaticContext'
 import Button from 'components/Button'

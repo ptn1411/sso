@@ -1,13 +1,12 @@
 import { createUseStyles } from 'react-jss'
 import { Theme } from '../theme'
-import grassBackground from '../../images/free_repeating_background_texture-light_green.jpg'
 
 export default createUseStyles((theme: Theme) => ({
   appBar: {
     display: 'flex',
     width: '100%',
     height: '4rem',
-    backgroundImage: `url(${grassBackground})`,
+    backgroundColor: 'white',
     backgroundRepeat: 'repeat',
     transition: `background-color 300ms ${theme.transition.easing.easeInOut}, height 300ms ${theme.transition.easing.easeInOut}`,
     '& $menuItems': {
