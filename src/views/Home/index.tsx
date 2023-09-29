@@ -41,6 +41,7 @@ const Home: FC<Props> = ({ children, ...props }) => {
                   does naturally, then we make a React hydratation when the client has been downloaded via the <b>bundle.js</b> files in the{' '}
                   {`<script src="bundle.js">`} DOM.
                 </p>
+
                 <p>
                   This frontend architecture is home made, and is as efficient as possible, which means the less code the better, and also
                   the less files the better. React SSR is very complicated to understand, I have been installing this for big companies,

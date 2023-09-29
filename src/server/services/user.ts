@@ -9,7 +9,14 @@ export const RegisterSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
   username: Yup.string().required('Username is required')
 })
+
+export const LoginSchema = Yup.object().shape({
+  password: Yup.string().min(5).max(16).required('Password is required'),
+  username: Yup.string().required('Username is required')
+})
+
 type UserRegister = InferType<typeof RegisterSchema>
+
 type User = {
   id: string
   email: string
@@ -21,6 +28,9 @@ type User = {
 interface FunUser<T> {
   data?: T
   error?: Error
+}
+export const checkPassword = (password: string, hashPassword: string) => {
+  return argon2.verify(hashPassword, password)
 }
 export const createUser = async (user: UserRegister): Promise<FunUser<User>> => {
   try {
@@ -60,6 +70,48 @@ export const createUser = async (user: UserRegister): Promise<FunUser<User>> => 
     }
   }
 }
+export const getUserByUsernameAndPassword = async (username: string, password: string): Promise<FunUser<User>> => {
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        username: username
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        username: true,
+        password: true,
+        role: true,
+        updatedAt: true
+      }
+    })
+    if (!user) {
+      return {
+        error: {
+          name: 'User error',
+          message: 'Tài khoản không tồn tại'
+        }
+      }
+    }
+    if (await checkPassword(password, user.password)) {
+      return {
+        data: user
+      }
+    }
+    return {
+      error: {
+        name: 'User error',
+        message: 'Tài khoản không tồn tại'
+      }
+    }
+  } catch (error: any) {
+    return {
+      error: error
+    }
+  }
+}
+
 export const getUserByUsername = async (username: string): Promise<FunUser<User>> => {
   try {
     const user = await prisma.user.findFirst({

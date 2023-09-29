@@ -11,6 +11,7 @@ export default function () {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const routers = ['/register', '/login']
+
   useEffect(() => {
     if (user) {
       if (routers.includes(pathname)) {

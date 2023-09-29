@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { JwtGenerateTokens } from '../services/jwt'
+
 import { RegisterSchema, createUser } from '../services/user'
 const router = Router()
 
@@ -17,17 +17,12 @@ router.post('/', async (req, res) => {
       })
     }
     if (newUser.data) {
-      const token = await JwtGenerateTokens({
-        userId: newUser.data.id,
-        updatedAt: newUser.data.updatedAt
-      })
       req.session.userId = newUser.data.id
       return res.json(
         Object.assign(
           {},
           {
-            status: true,
-            ...token
+            status: true
           }
         )
       )

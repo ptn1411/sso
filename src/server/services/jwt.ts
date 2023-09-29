@@ -11,6 +11,7 @@ interface FunGenerateTokens {
 }
 interface JwtPayloadUser {
   userId: string
+  appId: string
   updatedAt: Date
   iat: number
   exp: number
