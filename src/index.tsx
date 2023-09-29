@@ -31,6 +31,7 @@ const Main = () => {
       fontAwesomeCssStyles.parentNode.removeChild(fontAwesomeCssStyles)
     }
   }, [])
+
   return (
     <Provider store={store}>
       <HelmetProvider>

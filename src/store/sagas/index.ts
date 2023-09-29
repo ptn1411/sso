@@ -1,16 +1,14 @@
-import { take, put, call, fork, select, all, PutEffect, CallEffect } from 'redux-saga/effects'
+import { put, call, takeLatest, all, PutEffect, CallEffect } from 'redux-saga/effects'
 import { SagaIterator } from 'redux-saga'
 
-import { moviesLoadable, moviesCleanable } from '../reducers/selectors'
-
-import * as moviesApi from '../services/moviesApi'
+import * as registerApi from '../services/registerApi'
 
 import * as actions from '../actions'
-import { ActionDispatcher, ActionDispatcherResponse } from '../actions'
+import { ActionDispatcher, ActionDispatcherResponse, BaseAction } from '../actions'
 import { CallApiResponse } from '../services/callApi'
 
 // each entity defines 3 creators { request, success, failure }
-const { movies } = actions
+const { REGISTER_USER, registerUser } = actions
 
 function* fetchEntity(
   entity: ActionDispatcher,
@@ -26,39 +24,25 @@ function* fetchEntity(
 }
 
 // yeah! we can also bind Generators
-export const moviesFetch = fetchEntity.bind(null, movies, moviesApi.movies)
+
+export const registerFetch = (user: any) => fetchEntity.bind(null, registerUser, registerApi.registerUser, user)
 
 /** *************************************************************************** */
 /** ******************************* SAGAS ************************************* */
 /** *************************************************************************** */
 
-function* getMovies(dispatchKind: string): SagaIterator {
-  const cleanable = yield select(moviesCleanable)
-  if (cleanable) {
-    yield put(actions.clearMovies())
-  }
-  const loadable = yield select(moviesLoadable)
-  if (loadable) {
-    yield call(moviesFetch, { dispatchKind })
-  }
+function* postRegisterUser(action: BaseAction): SagaIterator {
+  const { response, error } = yield call(registerApi.registerUser, action.payload.user)
+  if (response) yield put({ type: REGISTER_USER.SUCCESS, response })
+  else if (error) yield put({ type: REGISTER_USER.FAILURE, error })
 }
-
 /** *************************************************************************** */
 /** ***************************** WATCHERS ************************************ */
 /** *************************************************************************** */
 
-function* watchMovies(): SagaIterator {
-  while (true) {
-    const { dispatchKind } = yield take(actions.TRIGGER_MOVIES)
-    if (dispatchKind === 'GET_MOVIES') {
-      yield call(getMovies, dispatchKind)
-    }
-  }
-}
-
 export default function* root(): SagaIterator {
   yield all([
-    fork(watchMovies)
+    takeLatest(REGISTER_USER.REQUEST, postRegisterUser)
     // You use one saga watcher per redux reducer (for example)
     // fork(watchAccount),
     // fork(watchTheaters),

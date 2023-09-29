@@ -10,10 +10,7 @@ const createRequestTypes = (base: string) =>
     return acc
   }, {} as Record<string, string>)
 
-export const MOVIES = createRequestTypes('MOVIES')
-
-export const TRIGGER_MOVIES = 'TRIGGER_MOVIES'
-export const CLEAR_MOVIES = 'CLEAR_MOVIES'
+export const REGISTER_USER = createRequestTypes('REGISTER_USER')
 
 const action = (
   type: string,
@@ -22,7 +19,10 @@ const action = (
   type,
   ...payload
 })
-
+export interface BaseAction {
+  type: string
+  payload?: any
+}
 export type ActionDispatcherResponse = { type: string; body?: unknown } & CallApiResponse
 export interface ActionDispatcher {
   request: (body: unknown) => ActionDispatcherResponse
@@ -30,11 +30,15 @@ export interface ActionDispatcher {
   failure: (body: unknown, error: ErrorCallApiResponse) => ActionDispatcherResponse
 }
 
-export const movies: ActionDispatcher = {
-  request: (body) => action(MOVIES[REQUEST], { body }),
-  success: (body, response) => action(MOVIES[SUCCESS], { body, response }),
-  failure: (body, error) => action(MOVIES[FAILURE], { body, error })
+export const registerUser: ActionDispatcher = {
+  request: (body) => action(REGISTER_USER[REQUEST], { body }),
+  success: (body, response) => action(REGISTER_USER[SUCCESS], { body, response }),
+  failure: (body, error) => action(REGISTER_USER[FAILURE], { body, error })
 }
 
-export const triggerMovies = (dispatchKind: 'GET_MOVIES') => action(TRIGGER_MOVIES, { dispatchKind })
-export const clearMovies = () => action(CLEAR_MOVIES)
+export const registerUserAction = (user: any) => {
+  return {
+    type: REGISTER_USER.REQUEST,
+    user
+  }
+}

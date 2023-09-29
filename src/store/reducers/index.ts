@@ -1,9 +1,8 @@
 import { combineReducers } from 'redux'
 import { ErrorCallApiResponse, SuccessCallApiResponse } from '../services/callApi'
+import register, { RegisterUserState } from './registerReducer'
 
-import * as ActionTypes from '../actions'
-
-interface ActionDispatch {
+export interface ActionDispatch {
   type: string
   body: { dispatchKind?: string }
   response: SuccessCallApiResponse
@@ -15,66 +14,20 @@ interface MainState {
   timezone: null | string
   userAgent: null | unknown
   hostname: null | string
+  user: null | any
 }
 
 export const INITIAL_STATE_MAIN: MainState = {
   language: null,
   timezone: null,
   userAgent: null,
-  hostname: null
+  hostname: null,
+  user: null
 }
 
 const main = (state = INITIAL_STATE_MAIN, action: ActionDispatch) => {
   const copyState = JSON.parse(JSON.stringify(state))
   switch (action.type) {
-    default:
-      return copyState
-  }
-}
-
-interface MoviesState {
-  isLoading: boolean
-  data: { id: string; poster_path: string; title: string; overview: string; release_date: string }[]
-  error?: ErrorCallApiResponse & { isBrowser: boolean }
-}
-
-export const INITIAL_STATE_MOVIES: MoviesState = {
-  isLoading: true,
-  data: []
-}
-
-const movies = (state = INITIAL_STATE_MOVIES, action: ActionDispatch) => {
-  const copyState = JSON.parse(JSON.stringify(state)) // Avoid JS mutation
-  switch (action.type) {
-    case ActionTypes.MOVIES.REQUEST:
-      delete copyState.error
-      return {
-        ...copyState,
-        isLoading: true
-      }
-    case ActionTypes.MOVIES.SUCCESS:
-      delete copyState.error
-      // eslint-disable-next-line no-case-declarations
-      let data: unknown = []
-      if (action.body.dispatchKind === 'GET_MOVIES') {
-        data = action.response?.results
-      }
-      return {
-        ...copyState,
-        isLoading: false,
-        data
-      }
-    case ActionTypes.MOVIES.FAILURE:
-      return {
-        ...copyState,
-        isLoading: false,
-        error: { message: action.error?.message, status: action.error?.status, isBrowser: process.env.BROWSER }
-      }
-    case ActionTypes.CLEAR_MOVIES:
-      delete copyState.error
-      return {
-        ...copyState
-      }
     default:
       return copyState
   }
@@ -86,10 +39,12 @@ const movies = (state = INITIAL_STATE_MOVIES, action: ActionDispatch) => {
 
 export interface AppState {
   main: MainState
-  movies: MoviesState
+
+  register: RegisterUserState
 }
 
 export default combineReducers<AppState>({
   main,
-  movies
+
+  register
 })

@@ -1,4 +1,3 @@
-import { User } from '@prisma/client'
 import jwt, { VerifyErrors } from 'jsonwebtoken'
 const DAY_TIME = 60 * 60 * 24
 interface FunSign {
@@ -11,7 +10,8 @@ interface FunGenerateTokens {
   error: Error | null
 }
 interface JwtPayloadUser {
-  user: User
+  userId: string
+  updatedAt: Date
   iat: number
   exp: number
 }

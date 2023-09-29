@@ -65,8 +65,12 @@ const Header: FC<Props> = ({ children, ...props }) => {
       <Link className={classNames(classes.navLink)} to="/">
         Home
       </Link>
-      <Link className={classNames(classes.navLink)} to="/movies">
-        Movies
+
+      <Link className={classNames(classes.navLink)} to="/login">
+        Login
+      </Link>
+      <Link className={classNames(classes.navLink)} to="/register">
+        Register
       </Link>
     </nav>
   )
